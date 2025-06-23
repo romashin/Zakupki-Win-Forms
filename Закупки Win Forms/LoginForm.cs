@@ -85,7 +85,7 @@ namespace Закупки_Win_Forms
                 mainForm.Show();
             }
             else
-                MessageBox.Show("No");
+                MessageBox.Show("Указан неверный пароль");
         }
 
         bool passVisionOnLoginForm = true;               // переменная для видимости пароля

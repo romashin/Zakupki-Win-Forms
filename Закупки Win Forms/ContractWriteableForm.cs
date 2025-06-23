@@ -23,10 +23,10 @@ namespace Закупки_Win_Forms
         {
             LoadData();
         }
-        private void LoadData()
+        private void LoadData() // загрузка таблицы
         {
-            DB db = new DB();
-            DataTable table = new DataTable();
+            DB db = new DB(); //
+            DataTable table = new DataTable(); //
 
             using (var adapter = new NpgsqlDataAdapter("SELECT * FROM Contracts", db.getConnection()))
             {

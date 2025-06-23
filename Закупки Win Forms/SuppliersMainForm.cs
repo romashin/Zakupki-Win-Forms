@@ -35,7 +35,7 @@ namespace Закупки_Win_Forms
                 db.openConnnection();
 
                 // SQL-запрос
-                string query = "SELECT * FROM Suppliers";
+                string query = "SELECT * FROM Temp_suppliers";
 
                 // Создаем адаптер и заполняем таблицу данными
                 using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, db.getConnection()))

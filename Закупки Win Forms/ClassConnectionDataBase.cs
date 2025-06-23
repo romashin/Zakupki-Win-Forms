@@ -10,7 +10,9 @@ namespace Закупки_Win_Forms
 {    
     class DB
     {
-       NpgsqlConnection sqlConnection = new NpgsqlConnection("Server=localhost;Port=5432;Database=zakupkiDB;User Id = alexxmsk; Password = 2321");
+        private string connectionString = "Server=localhost;Port=5432;Database=zakupkiDB;User Id = alexxmsk; Password = 2321";
+        NpgsqlConnection sqlConnection = new NpgsqlConnection("Server=localhost;Port=5432;Database=zakupkiDB;User Id = alexxmsk; Password = 2321");
+        
         public void openConnnection()
         {
             if (sqlConnection.State == System.Data.ConnectionState.Closed)

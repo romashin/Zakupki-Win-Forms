@@ -26,7 +26,7 @@ namespace Закупки_Win_Forms
                 this.Text = "Закупки WinForms — Главное меню";
                 this.StartPosition = FormStartPosition.CenterScreen;
                 this.Width = 500;
-                this.Height = 700;
+                this.Height = 750;
                 this.FormBorderStyle = FormBorderStyle.FixedSingle;
                 this.MaximizeBox = false;
 
@@ -66,6 +66,17 @@ namespace Закупки_Win_Forms
                 };
                 btnSuppliersReadOnly.Click += (sender, args) => OpenForm<SuppliersMainForm>();
                 this.Controls.Add(btnSuppliersReadOnly);
+                y += 50;
+
+                Button btnSuppliersMainForm = new Button
+                {
+                    Text = "Поставщики (новая форма)",
+                    Width = buttonWidth,
+                    Height = buttonHeight,
+                    Location = new System.Drawing.Point(x, y)
+                };
+                btnSuppliersMainForm.Click += (sender, args) => OpenForm<SuppliersWorkForm>();
+                this.Controls.Add(btnSuppliersMainForm);
                 y += 50;
 
                 Button btnContracts = new Button
@@ -110,6 +121,17 @@ namespace Закупки_Win_Forms
                 };
                 btnLoginForm.Click += (sender, args) => OpenForm<LoginForm>();
                 this.Controls.Add(btnLoginForm);
+                y += 50;
+
+                Button btnUserAdminForm = new Button
+                {
+                    Text = "Администирование пользователей",
+                    Width = buttonWidth,
+                    Height = buttonHeight,
+                    Location = new System.Drawing.Point(x, y)
+                };
+                btnUserAdminForm.Click += (sender, args) => OpenForm<UserAdministrationForm>();
+                this.Controls.Add(btnUserAdminForm);
                 y += 50;
 
             Button btnRegister = new Button

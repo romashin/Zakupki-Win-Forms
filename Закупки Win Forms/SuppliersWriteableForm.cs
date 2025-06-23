@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//using Npgsql;
 
 namespace Закупки_Win_Forms
 {
@@ -42,15 +41,12 @@ namespace Закупки_Win_Forms
 
         private void LoadSuppliersData()
         {
-            ///
-                
-            ///
             try
             {
                 suppliersTable = new DataTable();
 
                 db.openConnnection();
-                string query = "SELECT * FROM Suppliers";
+                string query = "SELECT * FROM Temp_suppliers";
 
                 using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, db.getConnection()))
                 {
@@ -61,7 +57,7 @@ namespace Закупки_Win_Forms
                 dataGridView1.ReadOnly = false;
 
                 /// === Здесь переименовываем заголовки столбцов ===
-                foreach (DataGridViewColumn column in dataGridView1.Columns)
+                foreach (DataGridViewColumn column in dataGridView1.Columns) // не сработало
                 {
                     switch (column.Name)
                     {
@@ -89,18 +85,18 @@ namespace Закупки_Win_Forms
                         case "Supplier_addres":
                             column.HeaderText = "Адрес поставщика";
                             break;
-                        case "Date_of_reg":
-                            column.HeaderText = "Дата регистрации";
-                            break;
+                        //case "Date_of_reg":
+                        //    column.HeaderText = "Дата регистрации";
+                        //    break;
                         case "SMSP_attribute":
                             column.HeaderText = "Атрибут СМСП";
                             break;
                         case "Date_of_SMSP":
                             column.HeaderText = "Дата СМСП";
                             break;
-                        case "Date_of_information":
-                            column.HeaderText = "Дата информации";
-                            break;
+                        //case "Date_of_information":
+                        //    column.HeaderText = "Дата информации";
+                        //    break;
                     }
                 }
                 ///
@@ -113,7 +109,7 @@ namespace Закупки_Win_Forms
             }
         }
 
-        private void SaveSuppliersData()
+        private void SaveSuppliersData() // функция сохранить данные
         {
             if (suppliersTable == null || suppliersTable.GetChanges() == null)
             {
@@ -131,32 +127,40 @@ namespace Закупки_Win_Forms
                     {
                         // === Обновление существующей записи ===
                         using (var cmd = new NpgsqlCommand(
-                            @"UPDATE Suppliers SET 
-                        Supplier_full_name = @Supplier_full_name,
-                        Supplier_short_name = @Supplier_short_name,
+                            @"UPDATE Temp_suppliers SET 
                         Organizational_form = @Organizational_form,
+                        Supplier_short_name = @Supplier_short_name,
+                        Supplier_full_name = @Supplier_full_name,
+                        type_of_entity = @type_of_entity,
+                        country_of_origin = @country_of_origin,
                         INN = @INN,
                         KPP = @KPP,
                         OGRN = @OGRN,
                         Supplier_addres = @Supplier_addres,
                         Date_of_reg = @Date_of_reg,
                         SMSP_attribute = @SMSP_attribute,
-                        Date_of_SMSP = @Date_of_SMSP,
-                        Date_of_information = @Date_of_information
+                        rusprofile_id = @rusprofile_id,
+                        ceo_name = @ceo_name
                       WHERE ID = @ID", db.getConnection()))
                         {
                             cmd.Parameters.AddWithValue("ID", row["ID"]);
-                            cmd.Parameters.AddWithValue("Supplier_full_name", row["Supplier_full_name"]);
-                            cmd.Parameters.AddWithValue("Supplier_short_name", row["Supplier_short_name"] ?? DBNull.Value);
                             cmd.Parameters.AddWithValue("Organizational_form", row["Organizational_form"]);
+                            cmd.Parameters.AddWithValue("Supplier_short_name", row["Supplier_short_name"] ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("Supplier_full_name", row["Supplier_full_name"]);
+                            cmd.Parameters.AddWithValue("type_of_entity", row["type_of_entity"]);
+                            cmd.Parameters.AddWithValue("country_of_origin", row["country_of_origin"]);
                             cmd.Parameters.AddWithValue("INN", row["INN"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("KPP", row["KPP"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("OGRN", row["OGRN"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("Supplier_addres", row["Supplier_addres"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("Date_of_reg", row["Date_of_reg"] ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("KPP", row["KPP"]);
+                            cmd.Parameters.AddWithValue("OGRN", row["OGRN"]);
+                            cmd.Parameters.AddWithValue("Supplier_addres", row["Supplier_addres"]);
+                            cmd.Parameters.AddWithValue("Date_of_reg", row["Date_of_reg"]);
                             cmd.Parameters.AddWithValue("SMSP_attribute", row["SMSP_attribute"]);
-                            cmd.Parameters.AddWithValue("Date_of_SMSP", row["Date_of_SMSP"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("Date_of_information", row["Date_of_information"] ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("rusprofile_id", row["rusprofile_id"]);
+                            cmd.Parameters.AddWithValue("ceo_name", row["ceo_name"]);
+
+
+                            //cmd.Parameters.AddWithValue("Date_of_SMSP", row["Date_of_SMSP"] ?? DBNull.Value);
+                            //cmd.Parameters.AddWithValue("Date_of_information", row["Date_of_information"] ?? DBNull.Value);
 
                             cmd.ExecuteNonQuery();
                         }
@@ -165,7 +169,23 @@ namespace Закупки_Win_Forms
                     {
                         // === Добавление новой записи ===
                         using (var cmd = new NpgsqlCommand(
-                            @"INSERT INTO Suppliers (
+                            @"INSERT INTO Temp_suppliers (
+                        
+                        Organizational_form,
+                        Supplier_short_name,
+                        Supplier_full_name,
+                        type_of_entity,
+                        country_of_origin,
+                        INN,
+                        KPP,
+                        OGRN,
+                        Supplier_addres,
+                        Date_of_reg,
+                        SMSP_attribute,
+                        rusprofile_id,
+                        ceo_name 
+
+                        
                         Supplier_full_name,
                         Supplier_short_name,
                         Organizational_form,
@@ -175,34 +195,39 @@ namespace Закупки_Win_Forms
                         Supplier_addres,
                         Date_of_reg,
                         SMSP_attribute,
-                        Date_of_SMSP,
-                        Date_of_information
+                        //Date_of_SMSP,
+                        //Date_of_information
                     ) VALUES (
-                        @Supplier_full_name,
-                        @Supplier_short_name,
+                        
                         @Organizational_form,
+                        @Supplier_short_name,
+                        @Supplier_full_name,
+                        @type_of_entity,
+                        @country_of_origin,
                         @INN,
                         @KPP,
                         @OGRN,
                         @Supplier_addres,
                         @Date_of_reg,
                         @SMSP_attribute,
-                        @Date_of_SMSP,
-                        @Date_of_information
+                        @rusprofile_id,
+                        @ceo_name       
                     )
                     RETURNING ID;", db.getConnection()))
                         {
-                            cmd.Parameters.AddWithValue("Supplier_full_name", row["Supplier_full_name"]);
-                            cmd.Parameters.AddWithValue("Supplier_short_name", row["Supplier_short_name"] ?? DBNull.Value);
                             cmd.Parameters.AddWithValue("Organizational_form", row["Organizational_form"]);
+                            cmd.Parameters.AddWithValue("Supplier_short_name", row["Supplier_short_name"] ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("Supplier_full_name", row["Supplier_full_name"]);
+                            cmd.Parameters.AddWithValue("type_of_entity", row["type_of_entity"]);
+                            cmd.Parameters.AddWithValue("country_of_origin", row["country_of_origin"]);
                             cmd.Parameters.AddWithValue("INN", row["INN"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("KPP", row["KPP"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("OGRN", row["OGRN"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("Supplier_addres", row["Supplier_addres"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("Date_of_reg", row["Date_of_reg"] ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("KPP", row["KPP"]);
+                            cmd.Parameters.AddWithValue("OGRN", row["OGRN"]);
+                            cmd.Parameters.AddWithValue("Supplier_addres", row["Supplier_addres"]);
+                            cmd.Parameters.AddWithValue("Date_of_reg", row["Date_of_reg"]);
                             cmd.Parameters.AddWithValue("SMSP_attribute", row["SMSP_attribute"]);
-                            cmd.Parameters.AddWithValue("Date_of_SMSP", row["Date_of_SMSP"] ?? DBNull.Value);
-                            cmd.Parameters.AddWithValue("Date_of_information", row["Date_of_information"] ?? DBNull.Value);
+                            cmd.Parameters.AddWithValue("rusprofile_id", row["rusprofile_id"]);
+                            cmd.Parameters.AddWithValue("ceo_name", row["ceo_name"]);
 
                             // Получаем новый ID из базы
                             object result = cmd.ExecuteScalar();
